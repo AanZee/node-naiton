@@ -1,0 +1,34 @@
+{
+  "name": "node-naiton",
+  "version": "0.0.1",
+  "description": "A Node.js wrapper for the Naiton Connect API",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AanZee/node-naiton.git"
+  },
+  "keywords": [
+    "naiton",
+    "connect",
+    "api"
+  ],
+  "author": "Gerhard Richard Edens <richard@aanzee.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AanZee/node-naiton/issues"
+  },
+  "homepage": "https://github.com/AanZee/node-naiton",
+  "dependencies": {
+    "MD5": "^1.2.1",
+    "lodash": "^2.4.1",
+    "mongoose": "^3.8.12",
+    "mongoose-auto-increment": "^3.2.4",
+    "promise": "^7.0.4",
+    "request": "^2.49.0",
+    "xml2js": "^0.4.4",
+    "zlib": "^1.0.5"
+  }
+}

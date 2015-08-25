@@ -1,0 +1,1 @@
+< _routines > < _routine > < _name > addressmanager_getdeliveries < /_name><_arguments><_clientid>553502</_clientid > < /_arguments><_options><_writeSchema>1</_writeSchema > < /_options></_routine > < _compression > 1 < /_compression><_returnType>XML</_returnType > < /_routines>
