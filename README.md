@@ -7,6 +7,27 @@ Node.js wrapper for the Navitas Naiton G3 business software.
 
 Not all methods are available yet. Feel free to add them and send in a pull request
 
+# Install dependecies
+
+First all the node modules. 
+
+```javascript
+npm install
+```
+
+Make sure you have bower installed globally: 
+
+```javascript
+npm install -g bower
+```
+
+Then install bower dependencies
+
+```javascript
+bower install
+```
+
+
 # Usage 
 
 Create a client
