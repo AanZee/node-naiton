@@ -2,9 +2,9 @@
   "name": "node-naiton",
   "version": "0.0.1",
   "description": "A Node.js wrapper for the Naiton Connect API",
-  "main": "index.js",
+  "main": "naiton.js",
   "scripts": {
-    "test": "mocha"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,10 @@
     "connect",
     "api"
   ],
-  "author": "Gerhard Richard Edens <richard@aanzee.nl>",
+  "author": {
+    "name": "Gerhard Richard Edens",
+    "email": "richard@aanzee.nl"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/AanZee/node-naiton/issues"
