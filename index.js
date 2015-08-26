@@ -14,7 +14,7 @@ var querystring = require('querystring'),
  * Debug mode for this module to run this from the command prompt.
  */
 var debugMode = true;
-var components = ['Base64', 'Clientmanager', 'Businessmanager', 'Employeemanager', 'Brandmanager', 'Rolemanager'];
+var components = ['Base64', 'Clientmanager', 'Businessmanager', 'Employeemanager', 'Brandmanager', 'Rolemanager', 'Basketmanager'];
 var prefix = '[node-naiton] - ';
 
 /**
@@ -120,10 +120,6 @@ Client.prototype.post = function(body, resolve, reject) {
 			reject(err);
 		}
 
-		if (debugMode) {
-			console.log(prefix + 'post - request - ' + self.options.action);
-		}
-
 		switch (self.options.returnType) {
 			case 'xml':
 				parseString(data, function(err, parseResult) {
@@ -131,8 +127,11 @@ Client.prototype.post = function(body, resolve, reject) {
 				});
 				break;
 			case 'object':
-				console.log(data);
-				json = JSON.parse(data);
+				try {
+					json = JSON.parse(data);
+				} catch (err) {
+					console.log(data);
+				}
 				break;
 		}
 
@@ -237,29 +236,73 @@ if (debugMode) {
 			// Get country list.
 			async.waterfall([
 
+				// Get businessess
 				function(cb) {
-					console.log('Waterfall start');
-					newClient.clientmanager.getcountrylist(function(result) {
-						console.log('Get country list');
-						cb(result);
+					newClient.businessmanager.getbusinesslist(2, 1, function(result) {
+						var list = JSON.parse(result).businessmanager_getbusinesslist,
+							business = {};
+
+						console.log('Waterfall start');
+						console.log('Get businesses...');
+
+						var i = 0,
+							netherlands = {},
+							belgium = {};
+
+						for (i in list) {
+							switch (list[i].businessname) {
+								case "Herbal Wellness":
+									business = list[i];
+									break;
+							}
+						}
+
+						cb(null, business);
 					}, function(error) {
-						console.log(error);
-						//cb(null);
+						cb(error, null);
 					});
 				},
-				function(countrylist, cb) {
 
-					console.log(countrylist);
+				// Get countrylist
+				function(business, cb) {
+					newClient.clientmanager.getcountrylist(function(result) {
+						console.log('Get country list...');
+						cb(null, business, JSON.parse(result).clientmanager_getcountrylist);
+					}, function(error) {
+						cb(error, null);
+					});
+				},
+
+				// Create client
+				function(business, countrylist, cb) {
+
+					/*
+					var i = 0,
+						netherlands = {},
+						belgium = {},
+						list = countrylist;
+
+					for (i in list) {
+						switch (list[i].code) {
+							case "NL":
+								netherlands = list[i];
+								break;
+							case "BE":
+								belgium = list[i];
+								break;
+						}
+					}
 
 					var client = new NaitonClient({
 						clientid: 0,
 						firstname: 'Gerhard Richard',
 						infix: '',
+						address: 'Erasmusbrug',
 						lastname: 'Edens',
 						gender: true,
 						dateofbirth: new Date(),
 						phone: '+31 (0)6 55 33 79 88',
-						email: 'richard+10@aanzee.nl',
+						email: 'richard+' + (+new Date()) + '@aanzee.nl',
 						password: 'nmjKli8',
 						allownewsletter: true,
 						addressid: 0,
@@ -267,8 +310,8 @@ if (debugMode) {
 						houseadd: '',
 						zipcode: '2202MN',
 						city: 'Noordwijk',
-						countryid: 1,
-						businessid: 611,
+						countryid: netherlands.countryid,
+						businessid: business.businessid,
 						companyid: 0,
 						discountgroupid: 0,
 						paymentdays: 0,
@@ -278,7 +321,96 @@ if (debugMode) {
 					});
 
 					newClient.clientmanager.addclient(client, function(result) {
+						console.log('Create client...');
+						var client = JSON.parse(result).clientmanager_addclient;
+						console.log(client);
+						cb(null, client, business, netherlands);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null);
+					});
+					*/
+
+					var i = 0,
+						netherlands = {},
+						belgium = {},
+						list = countrylist;
+
+					for (i in list) {
+						switch (list[i].code) {
+							case "NL":
+								netherlands = list[i];
+								break;
+							case "BE":
+								belgium = list[i];
+								break;
+						}
+					}
+
+					var client = {
+						returnValue: -1,
+						arguments: {
+							_clientid: 553513,
+							_addressid: 875135,
+							_returnvalue: 0
+						}
+					};
+
+					cb(null, client, business, netherlands);
+
+				},
+
+
+				// Get main combos via for basketmanager.
+				function(client, business, country, cb) {
+
+					newClient.clientmanager.getclientdetails(client.arguments._clientid, function(result) {
+						console.log('Get client from naiton...');
+						var clientObj = JSON.parse(result).clientmanager_getclientdetails[0];
+						cb(null, clientObj, business, country);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null);
+					});
+
+				},
+
+				// Get main combos via for basketmanager.
+				function(client, business, country, cb) {
+
+					newClient.basketmanager.getmaincombos(business.businessid, function(result) {
+						console.log('Get combos...');
+						var combos = JSON.parse(result).resultSet;
+						cb(null, combos, client, business, country);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null, null);
+					});
+
+				},
+
+				// Get products for basketmanager.
+				function(combos, client, business, country, cb) {
+
+					newClient.basketmanager.getproducts('st', business.businessid, 2, function(result) {
+						console.log('Get products for basket...');
+						var products = JSON.parse(result).basketmanager_getproducts;
+						cb(null, products, combos, client, business, country);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null, null, null);
+					});
+
+				},
+
+				// Get add update order.
+				function(products, combos, client, business, country, cb) {
+
+					newClient.basketmanager.addupdateorder(client, products, business, country, function(result) {
+						console.log('Get add update order...');
 						console.log(result);
+						var order = JSON.parse(result).basketmanager_addupdateorder;
+						console.log(order);
 						cb();
 					}, function(error) {
 						console.log(error);
@@ -286,6 +418,7 @@ if (debugMode) {
 					});
 
 				}
+
 			], function() {
 				console.log('Last action... done here.');
 			});

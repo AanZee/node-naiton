@@ -16,8 +16,53 @@ var Clientmanager = exports.Clientmanager = function(Client) {
 var prefix = '[node-naiton] components/clientmanager - ';
 
 /**
- * Get a list of brands with a primary key.
+ * Get a country by a code.
+ * @param {Integer} The id of a country.
  * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
+ */
+Clientmanager.prototype.getcountrybycode = function(code, resolve, reject) {
+
+	if (this.client.verifyAPIUsage(prefix + 'getcountrybycode - ', resolve, reject)) {
+
+		if (this.client.options.token === null) {
+			console.log(prefix + 'getcountrybycode - ' + this.client.options.errors.notoken);
+		} else {
+
+			// Server action.
+			this.client.options.action = '/service/executereturnsetpost?token=' + this.client.options.token + '&compression=0';
+
+			// Body content
+			var body;
+			body = '' +
+				'<?xml version="1.0" encoding="utf-8"?>' +
+				'<_routines>' +
+				'<_routine>' +
+				'<_name>clientnmanager_getcountrybycode</_name>' +
+				'<_arguments>' +
+				'<_code><![CDATA[' + code + ']]></_code>' +
+				'</_arguments>' +
+				'<_options>' +
+				'<_writeSchema>1</_writeSchema>' +
+				'</_options>' +
+				'</_routine>' +
+				'<_compression>0</_compression>' +
+				'<_returnType>json</_returnType>' +
+				'</_routines>';
+
+			// Post new client request
+			this.client.post(body, resolve, reject);
+
+		}
+
+	}
+
+};
+
+/**
+ * Get a list of countries.
+ * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
  */
 Clientmanager.prototype.getcountrylist = function(resolve, reject) {
 
@@ -45,8 +90,6 @@ Clientmanager.prototype.getcountrylist = function(resolve, reject) {
 				'<_returnType>json</_returnType>' +
 				'</_routines>';
 
-			console.log(body);
-
 			// Post new client request
 			this.client.post(body, resolve, reject);
 
@@ -56,10 +99,11 @@ Clientmanager.prototype.getcountrylist = function(resolve, reject) {
 
 };
 
-
 /**
- * Get a list of brands with a primary key.
+ * Add a client.
+ * @param {Object} The mongoose object containing all client information.
  * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
  */
 Clientmanager.prototype.addclient = function(client, resolve, reject) {
 
@@ -78,8 +122,6 @@ Clientmanager.prototype.addclient = function(client, resolve, reject) {
 			var mpre = (mm < 10) ? '0' : '';
 			var dd = client.dateofbirth.getDate().toString();
 			var dpre = (dd < 10) ? '0' : '';
-
-			console.log(client.businessid);
 
 			// Body content
 			var body;
@@ -120,8 +162,6 @@ Clientmanager.prototype.addclient = function(client, resolve, reject) {
 				'<_returnType>' + this.client.options.responseType + '</_returnType>' +
 				'</_routines>';
 
-			console.log(body);
-
 			// Post new client request
 			this.client.post(body, resolve, reject);
 
@@ -146,6 +186,12 @@ Clientmanager.prototype.addclient = function(client, resolve, reject) {
 
 };
 
+/**
+ * Update a client,
+ * @param {Object} The mongoose client object containing all the changes.
+ * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
+ */
 Clientmanager.prototype.updateclient = function(client, resolve, reject) {
 	if (this.client.verifyAPIUsage(prefix + 'addclient - ', resolve, reject)) {
 
@@ -199,26 +245,15 @@ Clientmanager.prototype.updateclient = function(client, resolve, reject) {
 
 		}
 
-		/**
-		 *
-		 * Posible return from server
-		 * ------------------------------
-		 
-		 	<clientmanager_updateclient>
-				<returnValue>-1</returnValue>
-				<arguments>
-					<_clientid>553502</_clientid>
-					<_addressid>875122</_addressid>
-					<_returnvalue>0</_returnvalue>
-				</arguments>
-			</clientmanager_updateclient>
-
-		 *
-		 */
-
 	}
 };
 
+/**
+ * Get a list of clients.
+ * @param {Object} The object containing a mongoose client.
+ * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
+ */
 Clientmanager.prototype.getfilteredclientlist = function(options, resolve, reject) {
 
 	if (this.client.verifyAPIUsage(prefix + 'addclient - ', resolve, reject)) {
@@ -276,6 +311,48 @@ Clientmanager.prototype.getfilteredclientlist = function(options, resolve, rejec
 
 		 *
 		 */
+
+	}
+
+};
+
+/**
+ * Get a list of brands with a primary key.
+ * @param {Integer} The id of a client.
+ * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
+ */
+Clientmanager.prototype.getclientdetails = function(clientId, resolve, reject) {
+
+	if (this.client.verifyAPIUsage(prefix + 'addclient - ', resolve, reject)) {
+
+		if (this.client.options.token === null) {
+			console.log(prefix + 'addclient - ' + this.client.options.errors.notoken);
+		} else {
+
+			// Server action.
+			this.client.options.action = '/service/executereturnsetpost?token=' + this.client.options.token + '&compression=0';
+
+			// Body content
+			var body;
+			body = '' +
+				'<_routines>' +
+				'<_routine>' +
+				'<_name>clientmanager_getclientdetails</_name>' +
+				'<_arguments>' +
+				'<_clientid>' + clientId + '</_clientid>' +
+				'</_arguments>' +
+				'</_routine>' +
+				'<_returnType>json</_returnType>' +
+				'<_parallelExecution>0</_parallelExecution>' +
+				'<_compression>0</_compression>' +
+				'<_jsonDateFormat>0</_jsonDateFormat>' +
+				'</_routines>';
+
+			// Send post request.
+			this.client.post(body, resolve, reject);
+
+		}
 
 	}
 

@@ -24,12 +24,11 @@
   "dependencies": {
     "MD5": "^1.2.1",
     "async": "^1.4.2",
-    "lodash": "^2.4.1",
+    "lodash": "^3.10.1",
     "mongoose": "^3.8.12",
     "mongoose-auto-increment": "^3.2.4",
     "promise": "^7.0.4",
     "request": "^2.49.0",
-    "xml2js": "^0.4.4",
-    "zlib": "^1.0.5"
+    "xml2js": "^0.4.4"
   }
 }
