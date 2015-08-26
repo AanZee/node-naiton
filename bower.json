@@ -1,0 +1,30 @@
+{
+  "name": "node-naiton",
+  "version": "0.0.1",
+  "homepage": "https://github.com/AanZee/node-naiton",
+  "authors": [
+    "Gerhard Richard Edens <richard@aanzee.nl>"
+  ],
+  "description": "A Node.js wrapper for the Naiton Connect API",
+  "main": "naiton.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "naiton",
+    "connect",
+    "api"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mustache.js": "~2.1.3"
+  }
+}

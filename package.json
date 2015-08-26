@@ -23,7 +23,9 @@
 	"bugs": {
 		"url": "https://github.com/AanZee/node-naiton/issues"
 	},
-	"postinstall": "bower cache clean && bower install",
+ 	"scripts": {
+		"postinstall": "bower cache clean && bower install"
+	},
 	"homepage": "https://github.com/AanZee/node-naiton",
 	"dependencies": {
 		"MD5": "^1.2.1",
