@@ -23,6 +23,7 @@
   "homepage": "https://github.com/AanZee/node-naiton",
   "dependencies": {
     "MD5": "^1.2.1",
+    "async": "^1.4.2",
     "lodash": "^2.4.1",
     "mongoose": "^3.8.12",
     "mongoose-auto-increment": "^3.2.4",

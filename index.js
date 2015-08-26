@@ -4,6 +4,7 @@
 var querystring = require('querystring'),
 	request = require('request'),
 	md5 = require('MD5'),
+	async = require('async'),
 	parseString = require('xml2js').parseString,
 	Promise = require('promise'),
 	_ = require('lodash');
@@ -37,7 +38,7 @@ var Client = function(options) {
 		site_secure_code: '',
 		env: 'production',
 		returnType: 'object',
-		userAgent: '',
+		userAgent: 'node-naiton-0.0.1',
 		username: '',
 		password: '',
 		ipaddress: '',
@@ -130,6 +131,7 @@ Client.prototype.post = function(body, resolve, reject) {
 				});
 				break;
 			case 'object':
+				console.log(data);
 				json = JSON.parse(data);
 				break;
 		}
@@ -232,36 +234,60 @@ if (debugMode) {
 
 	newClient.authenticate().then(function(result) {
 
-			var client = new NaitonClient({
-				clientid: 0,
-				firstname: 'Gerhard Richard',
-				infix: '',
-				lastname: 'Edens',
-				gender: true,
-				dateofbirth: new Date(),
-				phone: '+31 (0)6 55 33 79 88',
-				email: 'richard+10@aanzee.nl',
-				password: 'nmjKli8',
-				allownewsletter: true,
-				addressid: 0,
-				house: '19',
-				houseadd: '',
-				zipcode: '2202MN',
-				city: 'Noordwijk',
-				countryid: 1,
-				businessid: 611,
-				companyid: 0,
-				discountgroupid: 0,
-				paymentdays: 0,
-				creditline: 0,
-				emailblacklist: true,
-				returnvalue: ''
-			});
+			// Get country list.
+			async.waterfall([
 
-			newClient.clientmanager.addclient(client, function(result) {
-				console.log(result);
-			}, function(error) {
-				console.log(error);
+				function(cb) {
+					console.log('Waterfall start');
+					newClient.clientmanager.getcountrylist(function(result) {
+						console.log('Get country list');
+						cb(result);
+					}, function(error) {
+						console.log(error);
+						//cb(null);
+					});
+				},
+				function(countrylist, cb) {
+
+					console.log(countrylist);
+
+					var client = new NaitonClient({
+						clientid: 0,
+						firstname: 'Gerhard Richard',
+						infix: '',
+						lastname: 'Edens',
+						gender: true,
+						dateofbirth: new Date(),
+						phone: '+31 (0)6 55 33 79 88',
+						email: 'richard+10@aanzee.nl',
+						password: 'nmjKli8',
+						allownewsletter: true,
+						addressid: 0,
+						house: '19',
+						houseadd: '',
+						zipcode: '2202MN',
+						city: 'Noordwijk',
+						countryid: 1,
+						businessid: 611,
+						companyid: 0,
+						discountgroupid: 0,
+						paymentdays: 0,
+						creditline: 0,
+						emailblacklist: true,
+						returnvalue: ''
+					});
+
+					newClient.clientmanager.addclient(client, function(result) {
+						console.log(result);
+						cb();
+					}, function(error) {
+						console.log(error);
+						cb();
+					});
+
+				}
+			], function() {
+				console.log('Last action... done here.');
 			});
 
 		},
