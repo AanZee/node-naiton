@@ -251,7 +251,7 @@ if (debugMode) {
 
 						for (i in list) {
 							switch (list[i].businessname) {
-								case "Herbel Wellness":
+								case "Herbal Wellness":
 									business = list[i];
 									break;
 							}
