@@ -13,8 +13,8 @@ var querystring = require('querystring'),
 /**
  * Debug mode for this module to run this from the command prompt.
  */
-var debugMode = true;
-var components = ['Base64', 'Clientmanager', 'Businessmanager', 'Employeemanager', 'Brandmanager', 'Rolemanager', 'Basketmanager'];
+var debugMode = false;
+var components = ['Base64', 'Clientmanager', 'Businessmanager', 'Employeemanager', 'Brandmanager', 'Rolemanager', 'Basketmanager', 'Paymentmanager'];
 var prefix = '[node-naiton] - ';
 
 /**
@@ -251,7 +251,7 @@ if (debugMode) {
 
 						for (i in list) {
 							switch (list[i].businessname) {
-								case "Herbal Wellness":
+								case "Herbel Wellness":
 									business = list[i];
 									break;
 							}
@@ -276,7 +276,6 @@ if (debugMode) {
 				// Create client
 				function(business, countrylist, cb) {
 
-					/*
 					var i = 0,
 						netherlands = {},
 						belgium = {},
@@ -295,7 +294,7 @@ if (debugMode) {
 
 					var client = new NaitonClient({
 						clientid: 0,
-						firstname: 'Gerhard Richard',
+						firstname: 'Joice',
 						infix: '',
 						address: 'Erasmusbrug',
 						lastname: 'Edens',
@@ -323,40 +322,11 @@ if (debugMode) {
 					newClient.clientmanager.addclient(client, function(result) {
 						console.log('Create client...');
 						var client = JSON.parse(result).clientmanager_addclient;
-						console.log(client);
 						cb(null, client, business, netherlands);
 					}, function(error) {
 						console.log(error);
 						cb(error, null, null, null);
 					});
-					*/
-
-					var i = 0,
-						netherlands = {},
-						belgium = {},
-						list = countrylist;
-
-					for (i in list) {
-						switch (list[i].code) {
-							case "NL":
-								netherlands = list[i];
-								break;
-							case "BE":
-								belgium = list[i];
-								break;
-						}
-					}
-
-					var client = {
-						returnValue: -1,
-						arguments: {
-							_clientid: 553513,
-							_addressid: 875135,
-							_returnvalue: 0
-						}
-					};
-
-					cb(null, client, business, netherlands);
 
 				},
 
@@ -366,8 +336,8 @@ if (debugMode) {
 
 					newClient.clientmanager.getclientdetails(client.arguments._clientid, function(result) {
 						console.log('Get client from naiton...');
-						var clientObj = JSON.parse(result).clientmanager_getclientdetails[0];
-						cb(null, clientObj, business, country);
+						var client = JSON.parse(result).clientmanager_getclientdetails[0];
+						cb(null, client, business, country);
 					}, function(error) {
 						console.log(error);
 						cb(error, null, null, null);
@@ -408,9 +378,44 @@ if (debugMode) {
 
 					newClient.basketmanager.addupdateorder(client, products, business, country, function(result) {
 						console.log('Get add update order...');
-						console.log(result);
 						var order = JSON.parse(result).basketmanager_addupdateorder;
-						console.log(order);
+						cb(null, order, products, combos, client, business, country);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null, null, null, null);
+					});
+
+				},
+
+				// Add payment.
+				function(order, products, combos, client, business, country, cb) {
+
+					var paymentSettings = {
+						amount: '14.15',
+						name: 'Startdosering'
+					}
+
+					newClient.paymentmanager.addpayment(client, paymentSettings, function(result) {
+						console.log('Add payment...');
+						var payment = JSON.parse(result).paymentmanager_addpayment;
+						cb(null, payment, order, products, combos, client, business, country);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null, null, null, null, null);
+					});
+
+				},
+
+				// Connect payment to order.
+				function(payment, order, products, combos, client, business, country, cb) {
+
+					var paymentSettings = {
+						amount: '14.15'
+					}
+
+					newClient.paymentmanager.addorderpayment(payment, order, paymentSettings, function(result) {
+						console.log('Connect payment to order...');
+						var products = JSON.parse(result).paymentmanager_addorderpayment;
 						cb();
 					}, function(error) {
 						console.log(error);
