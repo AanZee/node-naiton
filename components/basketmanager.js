@@ -205,7 +205,6 @@ Basketmanager.prototype.addupdateorder = function(client, products, business, co
 				'<_deliverycity isNull="true">' + new Buffer(client.city).toString('base64') + '</_deliverycity>' +
 				'<_deliverystate isNull="true">' + new Buffer(client.city).toString('base64') + '</_deliverystate>' +
 				'<_deliverycountryid>' + new Buffer(country.countryid.toString()).toString('base64') + '</_deliverycountryid>' +
-				'<_discountcodeid>MA==</_discountcodeid>' +
 				'<_discountcodeid>' + new Buffer('0').toString('base64') + '</_discountcodeid>' +
 				'<_clientremark />' +
 				'<_salesremark />' +
@@ -336,11 +335,11 @@ Basketmanager.prototype.addupdateorder = function(client, products, business, co
 					'</xs:schema>' +
 					'</basket_dataset>').toString('base64') +
 				'</_featuresxml>' +
-				'<_deleteids isNull="true">bnVsbA==</_deleteids>' +
-				'<_deliveryaddresscode isNull="true">bnVsbA==</_deliveryaddresscode>' +
-				'<_deliveryaddressname isNull="true">bnVsbA==</_deliveryaddressname>' +
+				'<_deleteids isNull="true"/>' +
+				'<_deliveryaddresscode isNull="true"/>' +
+				'<_deliveryaddressname isNull="true"/>' +
 				'<_deliveryrecipientcode />' +
-				'<_deliveryrecipientemailadd isNull="true">bnVsbA==</_deliveryrecipientemailadd>' +
+				'<_deliveryrecipientemailadd isNull="true"/>' +
 				'<_returnvalue isNull="true">bnVsbA==</_returnvalue>' +
 				'</_arguments>' +
 				'<_options>' +
