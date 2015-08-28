@@ -39,9 +39,9 @@ var Client = function(options) {
 		env: 'production',
 		returnType: 'object',
 		userAgent: 'node-naiton-0.0.1',
-		username: 'sadmin@bodyview4.nl',
-		password: 'bodyview4',
-		ipaddress: '192.168.1.1',
+		username: '',
+		password: '',
+		ipaddress: '',
 		connectionstring: '',
 		errors: {
 			noresolve: 'There is no resolve defined, please define a resolve function.',
