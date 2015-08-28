@@ -187,7 +187,7 @@ Basketmanager.prototype.addupdateorder = function(client, products, business, co
 				'<_clientid>' + new Buffer(client.personid.toString()).toString('base64') + '</_clientid>' +
 				'<_employeeid>' + new Buffer('2').toString('base64') + '</_employeeid>' +
 				'<_businessid>' + new Buffer(business.businessid.toString()).toString('base64') + '</_businessid>' +
-				'<_sourceid>' + new Buffer('0').toString('base64') + '</_sourceid>' +
+				'<_sourceid>' + new Buffer('1').toString('base64') + '</_sourceid>' +
 				'<_stockid>' + new Buffer('1').toString('base64') + '</_stockid>' +
 				'<_billingrecipient>' + new Buffer(client.clientfullname).toString('base64') + '</_billingrecipient>' +
 				'<_billingstreetaddress>' + new Buffer(client.streetaddress).toString('base64') + '</_billingstreetaddress>' +
