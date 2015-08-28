@@ -434,3 +434,5 @@ if (debugMode) {
 		});
 
 }
+
+console.log('done');
