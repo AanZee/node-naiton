@@ -13,7 +13,7 @@ var querystring = require('querystring'),
 /**
  * Debug mode for this module to run this from the command prompt.
  */
-var debugMode = true;
+var debugMode = false;
 var components = ['Base64', 'Clientmanager', 'Businessmanager', 'Employeemanager', 'Brandmanager', 'Rolemanager', 'Basketmanager', 'Paymentmanager'];
 var prefix = '[node-naiton] - ';
 
@@ -40,10 +40,10 @@ var Client = function(options) {
 		returnType: 'object',
 		userAgent: 'node-naiton-0.0.1',
 
-		username: '',
-		password: '',
-		ipaddress: '',
-		connectionstring: '',
+		username: 'sadmin@bodyview4.nl',
+		password: 'bodyview4',
+		ipaddress: '172.30.0.7',
+		connectionstring: 'User ID=postgres;Password=Banek12;Database=bodyview4;Server=192.168.11.91;CommandTimeout=60;ConnectionLifeTime=60;Timeout=60;Port=5432;SSL=false;Pooling=true;MinPoolSize=1;MaxPoolSize=20;ApplicationName=WebService;',
 
 		errors: {
 			noresolve: 'There is no resolve defined, please define a resolve function.',
