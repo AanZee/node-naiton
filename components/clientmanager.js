@@ -142,7 +142,7 @@ Clientmanager.prototype.addclient = function(client, resolve, reject) {
 				'<_password><![CDATA[' + client.password + ']]></_password>' +
 				'<_allownewsletter>' + client.allownewsletter + '</_allownewsletter>' +
 				'<_addressid><![CDATA[' + client.addressid + ']]></_addressid>' +
-				'<_address><![CDATA[' + client.address + ']]></_address>' +
+				'<_address><![CDATA[' + client.streetaddress + ']]></_address>' +
 				'<_house><![CDATA[' + client.house + ']]></_house>' +
 				'<_houseadd><![CDATA[' + client.houseadd + ']]></_houseadd>' +
 				'<_zipcode><![CDATA[' + client.zipcode + ']]></_zipcode>' +

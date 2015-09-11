@@ -421,7 +421,7 @@ if (debugMode) {
 
 					newClient.basketmanager.addupdateorder(deliveryservice, client, products, business, country, function(result) {
 						console.log('Get add update order...');
-
+						console.log(result);
 						var order = JSON.parse(result).basketmanager_addupdateorder;
 						cb(null, order, deliveryservice, orderWeight, orderPrice, products, combos, client, business, country);
 					}, function(error) {

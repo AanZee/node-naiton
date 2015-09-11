@@ -157,7 +157,7 @@ Basketmanager.prototype.getclientinfobyid = function(clientId, resolve, reject) 
  * Get a list of brands with a primary key.
  * @param {Function} callback Gets called after request is complete
  */
-Basketmanager.prototype.addupdateorder = function(deliveryservice, client, products, business, country, resolve, reject) {
+Basketmanager.prototype.addupdateorder = function(deliveryservice, client, productsList, business, country, resolve, reject) {
 
 	var self = this;
 
@@ -222,127 +222,149 @@ Basketmanager.prototype.addupdateorder = function(deliveryservice, client, produ
 				'<_isordersuccesspagevisited>' + new Buffer('False').toString('base64') + '</_isordersuccesspagevisited>' +
 				'<_savedate>' + new Buffer(offerDate).toString('base64') + '</_savedate>' +
 				'<_ordersuccesspagevisitdate>' + new Buffer(offerDate).toString('base64') + '</_ordersuccesspagevisitdate>' +
-				'<_detailsxml>' +
-				new Buffer('<basket_dataset>' +
-					'<xs:schema id="basket_dataset" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">' +
-					'<xs:element name="basket_dataset" msdata:IsDataSet="true" msdata:MainDataTable="basket_table" msdata:UseCurrentLocale="true">' +
-					'<xs:complexType>' +
-					'<xs:choice minOccurs="0" maxOccurs="unbounded">' +
-					'<xs:element name="basket_table">' +
-					'<xs:complexType>' +
-					'<xs:sequence>' +
-					'<xs:element name="id" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="productid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="productname" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="quantity" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="salesprice" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="buyprice" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discount" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="comment" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="statusid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="originalid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="ismanualedited" type="xs:boolean" minOccurs="0" />' +
-					'<xs:element name="giveawayid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="discountmanual" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discountcode" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discountamount" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discountx4y" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discountquantity" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discountperiodical" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="discountgroup" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="invoiceid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="creditinvoiceid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="deliveryid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="parentid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="dateexpiry" type="xs:dateTime" minOccurs="0" />' +
-					'<xs:element name="giftcertificate" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="weight" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="originalweight" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="tax" type="xs:decimal" minOccurs="0" />' +
-					'<xs:element name="relatedorderdetailsid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="relateddeliveryserviceid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="relatedaddressid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="recipient" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="streetaddress" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="housenumber" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="housenumberadd" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="zipcode" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="city" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="state" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="countryid" type="xs:int" minOccurs="0" />' +
-					'<xs:element name="addresscode" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="addressname" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="recipientcode" type="xs:string" minOccurs="0" />' +
-					'<xs:element name="recipientemail" type="xs:string" minOccurs="0" />' +
-					'</xs:sequence>' +
-					'</xs:complexType>' +
-					'</xs:element>' +
-					'</xs:choice>' +
-					'</xs:complexType>' +
-					'</xs:element>' +
-					'</xs:schema>' +
-					'<basket_table>' +
-					'<id>1</id>' +
-					'<productid>57848</productid>' +
-					'<productname>Startdosering</productname>' +
-					'<quantity>1</quantity>' +
-					'<salesprice>14.15000000</salesprice>' +
-					'<buyprice>0.00000000</buyprice>' +
-					'<discount>0</discount>' +
-					'<comment />' +
-					'<statusid>1</statusid>' +
-					'<ismanualedited>false</ismanualedited>' +
-					'<discountmanual>0</discountmanual>' +
-					'<discountcode>0</discountcode>' +
-					'<discountamount>0</discountamount>' +
-					'<discountx4y>0</discountx4y>' +
-					'<discountquantity>0</discountquantity>' +
-					'<discountperiodical>0</discountperiodical>' +
-					'<discountgroup>0</discountgroup>' +
-					'<parentid>0</parentid>' +
-					'<giftcertificate />' +
-					'<weight>0.00000000</weight>' +
-					'<originalweight>0.00000000</originalweight>' +
-					'<tax>0.06000000</tax>' +
-					'<relateddeliveryserviceid>4</relateddeliveryserviceid>' +
-					'</basket_table>' +
-					'<basket_table>' +
-					'<id>4</id>' +
-					'<productid>' + deliveryservice.id + '</productid>' +
-					'<productname>' + deliveryservice.name + '</productname>' +
-					'<quantity>1</quantity>' +
-					'<salesprice>' + deliveryservice.salesprice + '</salesprice>' +
-					'<buyprice>' + deliveryservice.buyprice + '</buyprice>' +
-					'<discount>0</discount>' +
-					'<comment />' +
-					'<statusid>1</statusid>' +
-					'<ismanualedited>false</ismanualedited>' +
-					'<discountmanual>0</discountmanual>' +
-					'<discountcode>0</discountcode>' +
-					'<discountamount>0</discountamount>' +
-					'<discountx4y>0</discountx4y>' +
-					'<discountquantity>0</discountquantity>' +
-					'<discountperiodical>0</discountperiodical>' +
-					'<discountgroup>0</discountgroup>' +
-					'<parentid>0</parentid>' +
-					'<giftcertificate />' +
-					'<weight>0</weight>' +
-					'<tax>' + deliveryservice.tax + '</tax>' +
-					'<recipient />' +
-					'<streetaddress>' + client.streetaddress + '</streetaddress>' +
-					'<housenumber>' + client.housenumber + '</housenumber>' +
-					'<housenumberadd>' + client.housenumberadd + '</housenumberadd>' +
-					'<zipcode>' + client.zipcode + '</zipcode>' +
-					'<city>' + client.city + '</city>' +
-					'<state />' +
-					'<countryid>' + country.countryid.toString() + '</countryid>' +
-					'<addresscode />' +
-					'<addressname />' +
-					'<recipientcode />' +
-					'<recipientemail />' +
-					'</basket_table>' +
-					'</basket_dataset>').toString('base64') +
-				'</_detailsxml>' +
+				'<_detailsxml>';
+
+			var products = '<basket_dataset>' +
+				'<xs:schema id="basket_dataset" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">' +
+				'<xs:element name="basket_dataset" msdata:IsDataSet="true" msdata:MainDataTable="basket_table" msdata:UseCurrentLocale="true">' +
+				'<xs:complexType>' +
+				'<xs:choice minOccurs="0" maxOccurs="unbounded">' +
+				'<xs:element name="basket_table">' +
+				'<xs:complexType>' +
+				'<xs:sequence>' +
+				'<xs:element name="id" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="productid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="productname" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="quantity" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="salesprice" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="buyprice" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discount" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="comment" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="statusid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="originalid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="ismanualedited" type="xs:boolean" minOccurs="0" />' +
+				'<xs:element name="giveawayid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="discountmanual" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discountcode" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discountamount" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discountx4y" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discountquantity" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discountperiodical" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="discountgroup" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="invoiceid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="creditinvoiceid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="deliveryid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="parentid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="dateexpiry" type="xs:dateTime" minOccurs="0" />' +
+				'<xs:element name="giftcertificate" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="weight" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="originalweight" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="tax" type="xs:decimal" minOccurs="0" />' +
+				'<xs:element name="relatedorderdetailsid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="relateddeliveryserviceid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="relatedaddressid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="recipient" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="streetaddress" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="housenumber" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="housenumberadd" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="zipcode" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="city" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="state" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="countryid" type="xs:int" minOccurs="0" />' +
+				'<xs:element name="addresscode" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="addressname" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="recipientcode" type="xs:string" minOccurs="0" />' +
+				'<xs:element name="recipientemail" type="xs:string" minOccurs="0" />' +
+				'</xs:sequence>' +
+				'</xs:complexType>' +
+				'</xs:element>' +
+				'</xs:choice>' +
+				'</xs:complexType>' +
+				'</xs:element>' +
+				'</xs:schema>';
+
+				// Define counters.
+				var pp = 0, i = 0;
+
+				for (i in productsList) {
+
+					// Get product from product list result.
+					var product = productsList[i];
+
+					// Add one to count
+					pp = pp + 1;
+
+					products += '<basket_table>' +
+							'<id>' + pp + '</id>' +
+							'<productid>' + product.productid + '</productid>' +
+							'<productname>' + product.name + '</productname>' +
+							'<quantity>1</quantity>' +
+							'<salesprice>' + product.priceincl + '</salesprice>' +
+							'<buyprice>0.00000000</buyprice>' +
+							'<discount>0</discount>' +
+							'<comment />' +
+							'<statusid>1</statusid>' +
+							'<ismanualedited>false</ismanualedited>' +
+							'<discountmanual>0</discountmanual>' +
+							'<discountcode>0</discountcode>' +
+							'<discountamount>0</discountamount>' +
+							'<discountx4y>0</discountx4y>' +
+							'<discountquantity>0</discountquantity>' +
+							'<discountperiodical>0</discountperiodical>' +
+							'<discountgroup>0</discountgroup>' +
+							'<parentid>0</parentid>' +
+							'<giftcertificate />' +
+							'<weight>0.00000000</weight>' +
+							'<originalweight>0.00000000</originalweight>' +
+							'<tax>0.06000000</tax>' +
+							'<relateddeliveryserviceid>4</relateddeliveryserviceid>' +
+							'</basket_table>';
+
+				}
+
+				// Add a last product to your order, the delivery service.
+				pp = pp + 1;
+				products += '<basket_table>' +
+						'<id>' + pp + '</id>' +
+						'<productid>' + deliveryservice.id + '</productid>' +
+						'<productname>' + deliveryservice.name + '</productname>' +
+						'<quantity>1</quantity>' +
+						'<salesprice>' + deliveryservice.salesprice + '</salesprice>' +
+						'<buyprice>' + deliveryservice.buyprice + '</buyprice>' +
+						'<discount>0</discount>' +
+						'<comment />' +
+						'<statusid>1</statusid>' +
+						'<ismanualedited>false</ismanualedited>' +
+						'<discountmanual>0</discountmanual>' +
+						'<discountcode>0</discountcode>' +
+						'<discountamount>0</discountamount>' +
+						'<discountx4y>0</discountx4y>' +
+						'<discountquantity>0</discountquantity>' +
+						'<discountperiodical>0</discountperiodical>' +
+						'<discountgroup>0</discountgroup>' +
+						'<parentid>0</parentid>' +
+						'<giftcertificate />' +
+						'<weight>0</weight>' +
+						'<tax>' + deliveryservice.tax + '</tax>' +
+						'<recipient />' +
+						'<streetaddress>' + client.streetaddress + '</streetaddress>' +
+						'<housenumber>' + client.housenumber + '</housenumber>' +
+						'<housenumberadd>' + client.housenumberadd + '</housenumberadd>' +
+						'<zipcode>' + client.zipcode + '</zipcode>' +
+						'<city>' + client.city + '</city>' +
+						'<state />' +
+						'<countryid>' + country.countryid.toString() + '</countryid>' +
+						'<addresscode />' +
+						'<addressname />' +
+						'<recipientcode />' +
+						'<recipientemail />' +
+						'</basket_table>';
+
+				products += '</basket_dataset>';
+
+				body += new Buffer(products).toString('base64');
+
+				body += '</_detailsxml>' +
 				'<_featuresxml>' +
 				new Buffer('<basket_dataset>' +
 					'<xs:schema id="basket_dataset" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">' +
