@@ -20,6 +20,11 @@ var ClientSchema = new Schema({
 		trim: true,
 		required: 'Firstname is required'
 	},
+	streetaddress: {
+		type: String,
+		trim: true,
+		required: 'Firstname is required'
+	},
 	infix: {
 		type: String,
 		trim: true,

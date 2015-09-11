@@ -157,7 +157,7 @@ Basketmanager.prototype.getclientinfobyid = function(clientId, resolve, reject) 
  * Get a list of brands with a primary key.
  * @param {Function} callback Gets called after request is complete
  */
-Basketmanager.prototype.addupdateorder = function(client, products, business, country, resolve, reject) {
+Basketmanager.prototype.addupdateorder = function(deliveryservice, client, products, business, country, resolve, reject) {
 
 	var self = this;
 
@@ -306,6 +306,41 @@ Basketmanager.prototype.addupdateorder = function(client, products, business, co
 					'<tax>0.06000000</tax>' +
 					'<relateddeliveryserviceid>4</relateddeliveryserviceid>' +
 					'</basket_table>' +
+					'<basket_table>' +
+					'<id>4</id>' +
+					'<productid>' + deliveryservice.id + '</productid>' +
+					'<productname>' + deliveryservice.name + '</productname>' +
+					'<quantity>1</quantity>' +
+					'<salesprice>' + deliveryservice.salesprice + '</salesprice>' +
+					'<buyprice>' + deliveryservice.buyprice + '</buyprice>' +
+					'<discount>0</discount>' +
+					'<comment />' +
+					'<statusid>1</statusid>' +
+					'<ismanualedited>false</ismanualedited>' +
+					'<discountmanual>0</discountmanual>' +
+					'<discountcode>0</discountcode>' +
+					'<discountamount>0</discountamount>' +
+					'<discountx4y>0</discountx4y>' +
+					'<discountquantity>0</discountquantity>' +
+					'<discountperiodical>0</discountperiodical>' +
+					'<discountgroup>0</discountgroup>' +
+					'<parentid>0</parentid>' +
+					'<giftcertificate />' +
+					'<weight>0</weight>' +
+					'<tax>' + deliveryservice.tax + '</tax>' +
+					'<recipient />' +
+					'<streetaddress>' + client.streetaddress + '</streetaddress>' +
+					'<housenumber>' + client.housenumber + '</housenumber>' +
+					'<housenumberadd>' + client.housenumberadd + '</housenumberadd>' +
+					'<zipcode>' + client.zipcode + '</zipcode>' +
+					'<city>' + client.city + '</city>' +
+					'<state />' +
+					'<countryid>' + country.countryid.toString() + '</countryid>' +
+					'<addresscode />' +
+					'<addressname />' +
+					'<recipientcode />' +
+					'<recipientemail />' +
+					'</basket_table>' +
 					'</basket_dataset>').toString('base64') +
 				'</_detailsxml>' +
 				'<_featuresxml>' +
@@ -337,10 +372,10 @@ Basketmanager.prototype.addupdateorder = function(client, products, business, co
 					'</basket_dataset>').toString('base64') +
 				'</_featuresxml>' +
 				'<_deleteids isNull="true">bnVsbA==</_deleteids>' +
-				'<_deliveryaddresscode isNull="true">bnVsbA==</_deliveryaddresscode>' +
-				'<_deliveryaddressname isNull="true">bnVsbA==</_deliveryaddressname>' +
+				'<_deliveryaddresscode isNull="true">' + new Buffer(client.zipcode).toString('base64') + '</_deliveryaddresscode>' +
+				'<_deliveryaddressname isNull="true">' + new Buffer(client.streetaddress + ' ' + client.housenumber).toString('base64') + '</_deliveryaddressname>' +
 				'<_deliveryrecipientcode />' +
-				'<_deliveryrecipientemailadd isNull="true">bnVsbA==</_deliveryrecipientemailadd>' +
+				'<_deliveryrecipientemailadd isNull="true">' + new Buffer(client.email).toString('base64') + '</_deliveryrecipientemailadd>' +
 				'<_returnvalue isNull="true">bnVsbA==</_returnvalue>' +
 				'</_arguments>' +
 				'<_options>' +
@@ -353,6 +388,49 @@ Basketmanager.prototype.addupdateorder = function(client, products, business, co
 				'</_routines>';
 
 			self.client.post(body, resolve, reject);
+
+		}
+
+	}
+
+};
+
+/**
+ * Get a list of brands with a primary key.
+ * @param {Function} callback Gets called after request is complete
+ */
+Basketmanager.prototype.getdeliveryservice = function(business, country, orderWeight, orderPrice, resolve, reject) {
+
+	if (this.client.verifyAPIUsage(prefix + 'getdeliveryservice - ', resolve, reject)) {
+
+		if (this.client.options.token === null) {
+			console.log(prefix + 'getdeliveryservice - ' + this.client.options.errors.notoken);
+		} else {
+
+			// Server action.
+			this.client.options.action = '/service/executereturnsetpost?token=' + this.client.options.token + '&compression=0';
+
+			// Body content
+			var body;
+			body = '' +
+				'<_routines>' +
+				'<_routine>' +
+				'<_name>basketmanager_getdeliveryservice</_name>' +
+				'<_arguments>' +
+				'<_businessid>' + business.businessid + '</_businessid>' +
+				'<_countryid>' + country.countryid + '</_countryid>' +
+				'<_orderweight>' + orderWeight + '</_orderweight>' +
+				'<_ordersum>' + orderPrice + '</_ordersum>' +
+				'</_arguments>' +
+				'<_options>' +
+				'<_writeSchema>1</_writeSchema>' +
+				'</_options>' +
+				'</_routine>' +
+				'<_compression>0</_compression>' +
+				'<_returnType>json</_returnType>' +
+				'</_routines>';
+
+			this.client.post(body, resolve, reject);
 
 		}
 

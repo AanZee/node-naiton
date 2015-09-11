@@ -13,7 +13,7 @@ var querystring = require('querystring'),
 /**
  * Debug mode for this module to run this from the command prompt.
  */
-var debugMode = false;
+var debugMode = true;
 var components = ['Base64', 'Clientmanager', 'Businessmanager', 'Employeemanager', 'Brandmanager', 'Rolemanager', 'Basketmanager', 'Paymentmanager'];
 var prefix = '[node-naiton] - ';
 
@@ -39,10 +39,12 @@ var Client = function(options) {
 		env: 'production',
 		returnType: 'object',
 		userAgent: 'node-naiton-0.0.1',
+
 		username: '',
 		password: '',
 		ipaddress: '',
 		connectionstring: '',
+
 		errors: {
 			noresolve: 'There is no resolve defined, please define a resolve function.',
 			noreject: 'There is no reject defined, please define a reject function.',
@@ -94,6 +96,21 @@ module.exports.createClient = function(options) {
  * POST system
  * =====================================================================================
  */
+
+Client.prototype.randomUser = function(callback) {
+	var req = request({
+		url: 'https://randomuser.me/api/',
+	}, function(err, res, data) {
+		if (err) {
+			throw err;
+		}
+		try {
+			callback(JSON.parse(data).results[0].user);
+		} catch (err) {
+			callback(JSON.parse('{ "results": [ { "user": { "gender": "female", "name": { "title": "miss", "first": "lisa", "last": "roy" }, "location": { "street": "6484 esplanade du 9 novembre 1989", "city": "saint-denis", "state": "haute-saône", "zip": 48687 }, "email": "lisa.roy@example.com", "username": "lazyfrog552", "password": "fishy", "salt": "sFOBrw6f", "md5": "31e0b90022140a778aadc09c4a7f0de3", "sha1": "4f09db771673a7d9d28e8ac25b320120327c8c6d", "sha256": "6eb8ca28ac06581c252928274f348785d3eb76dbd6f9fac58efc0e3f168b2201", "registered": 1310889302, "dob": 1415933431, "phone": "02-85-16-16-18", "cell": "06-39-13-54-64", "INSEE": "2141116122237 45", "picture": { "large": "https://randomuser.me/api/portraits/women/7.jpg", "medium": "https://randomuser.me/api/portraits/med/women/7.jpg", "thumbnail": "https://randomuser.me/api/portraits/thumb/women/7.jpg" } } } ], "nationality": "FR", "seed": "f1be3711f4f067e703", "version": "0.7" }').results[0].user);
+		}
+	});
+}
 
 /**
  * Wrapper function for the POST requests
@@ -236,8 +253,17 @@ if (debugMode) {
 			// Get country list.
 			async.waterfall([
 
-				// Get businessess
 				function(cb) {
+					newClient.randomUser(function(result) {
+						var user = result;
+						cb(null, user);
+					}, function(error) {
+						cb(error, null);
+					});
+				},
+
+				// Get businessess
+				function(user, cb) {
 					newClient.businessmanager.getbusinesslist(2, 1, function(result) {
 						var list = JSON.parse(result).businessmanager_getbusinesslist,
 							business = {};
@@ -257,24 +283,24 @@ if (debugMode) {
 							}
 						}
 
-						cb(null, business);
+						cb(null, user, business);
 					}, function(error) {
 						cb(error, null);
 					});
 				},
 
 				// Get countrylist
-				function(business, cb) {
+				function(user, business, cb) {
 					newClient.clientmanager.getcountrylist(function(result) {
 						console.log('Get country list...');
-						cb(null, business, JSON.parse(result).clientmanager_getcountrylist);
+						cb(null, user, business, JSON.parse(result).clientmanager_getcountrylist);
 					}, function(error) {
 						cb(error, null);
 					});
 				},
 
 				// Create client
-				function(business, countrylist, cb) {
+				function(user, business, countrylist, cb) {
 
 					var i = 0,
 						netherlands = {},
@@ -294,10 +320,10 @@ if (debugMode) {
 
 					var client = new NaitonClient({
 						clientid: 0,
-						firstname: 'Joice',
+						firstname: user.name.first,
 						infix: '',
-						address: 'Erasmusbrug',
-						lastname: 'Edens',
+						streetaddress: 'Erasmusbrug',
+						lastname: user.name.last,
 						gender: true,
 						dateofbirth: new Date(),
 						phone: '+31 (0)6 55 33 79 88',
@@ -373,13 +399,31 @@ if (debugMode) {
 
 				},
 
-				// Get add update order.
+				// Get delivery service.
 				function(products, combos, client, business, country, cb) {
 
-					newClient.basketmanager.addupdateorder(client, products, business, country, function(result) {
+					var orderWeight = '0.190',
+						orderPrice = '0.00';
+
+					newClient.basketmanager.getdeliveryservice(business, country, orderWeight, orderPrice, function(result) {
+						console.log('Get delivery service...');
+						var deliveryservice = JSON.parse(result).basketmanager_getdeliveryservice[0];
+						cb(null, deliveryservice, orderWeight, orderPrice, products, combos, client, business, country);
+					}, function(error) {
+						console.log(error);
+						cb(error, null, null, null, null, null, null);
+					});
+
+				},
+
+				// Get add update order.
+				function(deliveryservice, orderWeight, orderPrice, products, combos, client, business, country, cb) {
+
+					newClient.basketmanager.addupdateorder(deliveryservice, client, products, business, country, function(result) {
 						console.log('Get add update order...');
+
 						var order = JSON.parse(result).basketmanager_addupdateorder;
-						cb(null, order, products, combos, client, business, country);
+						cb(null, order, deliveryservice, orderWeight, orderPrice, products, combos, client, business, country);
 					}, function(error) {
 						console.log(error);
 						cb(error, null, null, null, null, null, null);
@@ -388,7 +432,7 @@ if (debugMode) {
 				},
 
 				// Add payment.
-				function(order, products, combos, client, business, country, cb) {
+				function(order, deliveryservice, orderWeight, orderPrice, products, combos, client, business, country, cb) {
 
 					var paymentSettings = {
 						amount: '14.15',
@@ -398,7 +442,7 @@ if (debugMode) {
 					newClient.paymentmanager.addpayment(client, paymentSettings, function(result) {
 						console.log('Add payment...');
 						var payment = JSON.parse(result).paymentmanager_addpayment;
-						cb(null, payment, order, products, combos, client, business, country);
+						cb(null, payment, order, deliveryservice, orderWeight, orderPrice, products, combos, client, business, country);
 					}, function(error) {
 						console.log(error);
 						cb(error, null, null, null, null, null, null, null);
@@ -407,7 +451,7 @@ if (debugMode) {
 				},
 
 				// Connect payment to order.
-				function(payment, order, products, combos, client, business, country, cb) {
+				function(payment, order, deliveryservice, orderWeight, orderPrice, products, combos, client, business, country, cb) {
 
 					var paymentSettings = {
 						amount: '14.15'
@@ -434,5 +478,3 @@ if (debugMode) {
 		});
 
 }
-
-console.log('done');
