@@ -202,7 +202,7 @@ Clientmanager.prototype.getclientdetailsbyemail = function(email, businessid, re
 		} else {
 
 			// Server action.
-			this.client.options.action = '/service/executenonquerypost?token=' + this.client.options.token + '&compression=0';
+			this.client.options.action = '/service/executereturnsetpost?token=' + this.client.options.token + '&compression=0';
 
 			// Body content
 			var body = '' +
