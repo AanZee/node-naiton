@@ -217,8 +217,8 @@ Clientmanager.prototype.getclientdetailsbyemail = function(email, businessid, re
 				'<_commandTimeout>300</_commandTimeout>' +
 				'</_options>' +
 				'</_routine>' +
-				'<_compression>0</_compression>' +
-				'<_returnType>json</_returnType>' +
+				'<_compression>' + this.client.options.compression + '</_compression>' +
+				'<_returnType>' + this.client.options.responseType + '</_returnType>' +
 				'</_routines>';
 
 			// Post new client request
