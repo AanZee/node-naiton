@@ -210,11 +210,12 @@ Clientmanager.prototype.getclientdetailsbyemail = function(email, businessid, re
 				'<_routine>' +
 				'<_name>clientmanager_getclientdetailsbyemail</_name>' +
 				'<_arguments>' +
-				'<_businessid><![CDATA[' + businessid + ']></_businessid>' +
-				'<_email><![CDATA[' + email + ']></_email>' +
+				'<_businessid>' + this.base64.encode(businessid) + '</_businessid>' +
+				'<_email>' + this.base64.encode(email) + '</_email>' +
 				'</_arguments>' +
 				'<_options>' +
 				'<_commandTimeout>300</_commandTimeout>' +
+				'<_encoding all="1" isentry="1">1</_encoding>' +
 				'</_options>' +
 				'</_routine>' +
 				'<_compression>' + this.client.options.compression + '</_compression>' +
