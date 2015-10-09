@@ -186,6 +186,49 @@ Clientmanager.prototype.addclient = function(client, resolve, reject) {
 
 };
 
+
+/**
+ * Add a client.
+ * @param {Object} The mongoose object containing all client information.
+ * @param {Function} callback Gets called after request is complete
+ * @param {Function} callback Gets called after request is complete but has an error
+ */
+Clientmanager.prototype.getclientdetailsbyemail = function(email, businessid, resolve, reject) {
+
+	if (this.client.verifyAPIUsage(prefix + 'addclient - ', resolve, reject)) {
+
+		if (this.client.options.token === null) {
+			console.log(prefix + 'addclient - ' + this.client.options.errors.notoken);
+		} else {
+
+			// Server action.
+			this.client.options.action = '/service/executenonquerypost?token=' + this.client.options.token + '&compression=0';
+
+			// Body content
+			var body = '' +
+				'<_routines>' +
+				'<_routine>' +
+				'<_name>clientmanager_getclientdetailsbyemail</_name>' +
+				'<_arguments>' +
+				'<_businessid><![CDATA[' + businessid + ']></_businessid>' +
+				'<_email><![CDATA[' + email + ']></_email>' +
+				'</_arguments>' +
+				'<_options>' +
+				'<_commandTimeout>300</_commandTimeout>' +
+				'</_options>' +
+				'</_routine>' +
+				'<_compression>0</_compression>' +
+				'<_returnType>json</_returnType>' +
+				'</_routines>';
+
+			// Post new client request
+			this.client.post(body, resolve, reject);
+		}
+
+	}
+
+};
+
 /**
  * Update a client,
  * @param {Object} The mongoose client object containing all the changes.
